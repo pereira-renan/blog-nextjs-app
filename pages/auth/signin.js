@@ -1,12 +1,16 @@
-import { getSession, getProviders, getCsrfToken } from "next-auth/react"
-
-export default async (req, res) => {
-  const session = await getProviders({ req })
-  console.log(session)
-  res.send(JSON.stringify(session, null, 2))
-}
-/*
-
+import React from "react"
+import { getProviders, signIn, getSession, getCsrfToken } from "next-auth/react"
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Input,
+  Container,
+  Stack,
+} from "@chakra-ui/react"
+export default function SignIn({ providers, csrfToken }) {
+  return (
     <Container maxW="xl" centerContent>
       <Heading as="h1" textAlign="center">
         Welcome to our custom page
@@ -38,4 +42,30 @@ export default async (req, res) => {
         </Stack>
       </Box>
     </Container>
-    */
+  )
+}
+
+export async function getServerSideProps(context) {
+  const { req, res } = context
+  console.log
+  const session = await getSession({ req })
+
+  if (session && res && session.accessToken) {
+    res.writeHead(302, {
+      Location: "/",
+    })
+    res.end()
+    return
+  }
+  const providers = await getProviders(context)
+  //console.log(providers)
+
+  return {
+    props: {
+      session: null,
+      providers: providers,
+      //providers: await getProviders(context),
+      csrfToken: await getCsrfToken(context),
+    },
+  }
+}
