@@ -96,6 +96,19 @@ export default function Header() {
               <a>Middleware protected</a>
             </Link>
           </li>
+          {session && (
+            <li
+              className={styles.navItem}
+              onClick={(e) => {
+                e.preventDefault()
+                signOut()
+              }}
+            >
+              <Link href="">
+                <a>Sign Out</a>
+              </Link>
+            </li>
+          )}
         </ul>
       </nav>
     </header>

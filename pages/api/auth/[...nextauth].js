@@ -1,10 +1,5 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
-import FacebookProvider from "next-auth/providers/facebook"
-import GithubProvider from "next-auth/providers/github"
-import TwitterProvider from "next-auth/providers/twitter"
-import Auth0Provider from "next-auth/providers/auth0"
-// import AppleProvider from "next-auth/providers/apple"
 import EmailProvider from "next-auth/providers/email"
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
 import clientPromise from "../../../lib/mongodb"
@@ -38,41 +33,9 @@ export default NextAuth({
         })
       },
     }),
-    // Temporarily removing the Apple provider from the demo site as the
-    // callback URL for it needs updating due to Vercel changing domains
-    /*
-    Providers.Apple({
-      clientId: process.env.APPLE_ID,
-      clientSecret: {
-        appleId: process.env.APPLE_ID,
-        teamId: process.env.APPLE_TEAM_ID,
-        privateKey: process.env.APPLE_PRIVATE_KEY,
-        keyId: process.env.APPLE_KEY_ID,
-      },
-    }),
-*/
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_ID,
-      clientSecret: process.env.FACEBOOK_SECRET,
-    }),
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-      // https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
-      scope: "read:user",
-    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-    }),
-    TwitterProvider({
-      clientId: process.env.TWITTER_ID,
-      clientSecret: process.env.TWITTER_SECRET,
-    }),
-    Auth0Provider({
-      clientId: process.env.AUTH0_ID,
-      clientSecret: process.env.AUTH0_SECRET,
-      issuer: process.env.AUTH0_ISSUER,
     }),
   ],
   // The secret should be set to a reasonably long random string.
@@ -87,7 +50,8 @@ export default NextAuth({
     strategy: "jwt",
 
     // Seconds - How long until an idle session expires and is no longer valid.
-    // maxAge: 30 * 24 * 60 * 60, // 30 days
+    // maxAge: 24 * 60 * 60, // 1 day
+    maxAge: 1 * 60, // 1 minute
 
     // Seconds - Throttle how frequently to write to database to extend a session.
     // Use it to limit write operations. Set to 0 to always update the database.
