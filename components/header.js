@@ -96,6 +96,18 @@ export default function Header() {
               <a>Middleware protected</a>
             </Link>
           </li>
+          <li className={styles.navItem}>
+            <Link href="/posts">
+              <a>Posts</a>
+            </Link>
+          </li>
+          {session && (
+            <li className={styles.navItem}>
+              <Link href="/add-post">
+                <a>Add Post</a>
+              </Link>
+            </li>
+          )}
           {session && (
             <li
               className={styles.navItem}

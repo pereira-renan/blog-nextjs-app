@@ -3,7 +3,10 @@ import { NextResponse } from "next/server"
 
 /** @param {import("next/server").NextRequest} req */
 export async function middleware(req) {
-  if (req.nextUrl.pathname === "/middleware-protected") {
+  if (
+    req.nextUrl.pathname === "/middleware-protected" ||
+    req.nextUrl.pathname === "/add-post"
+  ) {
     const session = await getToken({
       req,
       secret: process.env.SECRET,

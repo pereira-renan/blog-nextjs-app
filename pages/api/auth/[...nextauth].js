@@ -51,7 +51,8 @@ export default NextAuth({
 
     // Seconds - How long until an idle session expires and is no longer valid.
     // maxAge: 24 * 60 * 60, // 1 day
-    maxAge: 1 * 60, // 1 minute
+    //maxAge: 1 * 60, // 1 minute
+    maxAge: 1 * 60 * 60, // 1 hour
 
     // Seconds - Throttle how frequently to write to database to extend a session.
     // Use it to limit write operations. Set to 0 to always update the database.
