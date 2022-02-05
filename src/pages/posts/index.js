@@ -1,19 +1,27 @@
 import Head from "next/head"
+
 import Layout from "../../components/layout"
 import PostCard from "../../components/PostCard"
 
-export default function Post({ post }) {
+export default function Home({ posts }) {
   return (
     <Layout>
       <Head>
         <title>Home</title>
       </Head>
-
       <main>
         <div>
-          <ul>
-            <PostCard post={post} />
-          </ul>
+          {posts.length === 0 ? (
+            <h2>No added posts</h2>
+          ) : (
+            <ul>
+              <li>
+                {posts.map((post, i) => (
+                  <PostCard post={post} key={i} />
+                ))}
+              </li>
+            </ul>
+          )}
         </div>
       </main>
     </Layout>
@@ -21,28 +29,20 @@ export default function Post({ post }) {
 }
 
 export async function getServerSideProps(ctx) {
-  let id = ctx.params.id
   // get the current environment
   let dev = process.env.NODE_ENV !== "production"
   let { DEV_URL, PROD_URL } = process.env
 
   // request posts from api
-  let response = await fetch(`${dev ? DEV_URL : PROD_URL}/api/posts/${id}`)
+  let response = await fetch(`${dev ? DEV_URL : PROD_URL}/api/posts`, {
+    method: "GET",
+  })
   // extract the data
   let data = await response.json()
 
-  if (!data.success) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/",
-      },
-    }
-  }
-
   return {
     props: {
-      post: data["message"],
+      posts: data["message"],
     },
   }
 }

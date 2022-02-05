@@ -14,9 +14,8 @@ export default function PostCard({ post }) {
 
     try {
       // Update post
-      await fetch("/api/posts", {
+      await fetch(`/api/posts/${postId}`, {
         method: "PUT",
-        body: postId,
       })
 
       // reset the publishing state
@@ -36,9 +35,8 @@ export default function PostCard({ post }) {
 
     try {
       // Update post
-      await fetch("/api/posts", {
+      await fetch(`/api/posts/${postId}`, {
         method: "PUT",
-        body: postId,
       })
 
       // reset the publishing state
@@ -69,9 +67,8 @@ export default function PostCard({ post }) {
 
     try {
       // Delete post
-      await fetch("/api/posts", {
+      await fetch(`/api/posts/${postId}`, {
         method: "DELETE",
-        body: postId,
       })
 
       // reset the deleting state
@@ -87,45 +84,46 @@ export default function PostCard({ post }) {
 
   return (
     <>
-      <li>
-        <h3>{post.title}</h3>
-        <p>{post.content}</p>
-        <p>{post.id}</p>
+      <h3>{post.title}</h3>
+      <p>{post.content}</p>
+      <p>{post.id}</p>
 
-        <p>{String(post.published)}</p>
-        <small>{new Date(post.createdAt).toLocaleDateString()}</small>
-        <br />
-        <button type="button" onClick={() => router.push(`/posts/${post.id}`)}>
-          View Post
+      <p>{String(post.published)}</p>
+      <small>{new Date(post.createdAt).toLocaleDateString()}</small>
+      <br />
+      <button type="button" onClick={() => router.push(`/posts/${post.id}`)}>
+        View Post
+      </button>
+      {!post.published ? (
+        <button type="button" onClick={() => publishPost(post.id)}>
+          {publishing ? "Publishing" : "Publish"}
         </button>
-        {!post.published ? (
-          <button type="button" onClick={() => publishPost(post._id)}>
-            {publishing ? "Publishing" : "Publish"}
+      ) : (
+        <button type="button" onClick={() => unpublishPost(post.id)}>
+          {unpublishing ? "Unpublishing" : "Unpublish"}
+        </button>
+      )}
+      {deleting ? (
+        <>
+          Delete this post?
+          <button type="button" onClick={() => confirmDeletePost(post["id"])}>
+            Yes
           </button>
-        ) : (
-          <button type="button" onClick={() => unpublishPost(post._id)}>
-            {unpublishing ? "Unpublishing" : "Unpublish"}
-          </button>
-        )}
-        {deleting ? (
-          <>
-            Delete this post?
-            <button
-              type="button"
-              onClick={() => confirmDeletePost(post["_id"])}
-            >
-              Yes
-            </button>
-            <button type="button" onClick={() => deletePost()}>
-              No
-            </button>
-          </>
-        ) : (
           <button type="button" onClick={() => deletePost()}>
-            Delete
+            No
           </button>
-        )}
-      </li>
+        </>
+      ) : (
+        <button type="button" onClick={() => deletePost()}>
+          Delete
+        </button>
+      )}
+      <button
+        type="button"
+        onClick={() => router.push(`/posts/${post.id}/comments`)}
+      >
+        View Comments
+      </button>
     </>
   )
 }
